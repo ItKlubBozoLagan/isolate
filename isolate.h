@@ -90,6 +90,8 @@ extern int cf_first_uid;
 extern int cf_first_gid;
 extern int cf_num_boxes;
 extern int cf_restricted_init;
+extern char *cf_sched_mode;
+extern int cf_sched_priority;
 
 struct cf_per_box {
   struct cf_per_box *next;

@@ -8,6 +8,10 @@ box_root = /var/local/lib/isolate
 # Directory where lock files are created.
 lock_root = /run/isolate/locks
 
+# Can also be fifo to run with SCHED_FIFO scheduling
+sched_mode=system
+sched_priority=0
+
 # Control group under which we place our subgroups
 # Either an explicit path to a subdirectory in cgroupfs, or "auto:file" to read
 # the path from "file", where it is put by isolate-cg-helper.

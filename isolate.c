@@ -694,6 +694,17 @@ box_keeper(void)
 
 /*** The process running inside the box ***/
 
+static void setup_sched(void)
+{
+  if (!cf_sched_mode || strcmp(cf_sched_mode, "fifo") != 0)
+    return;
+
+  const struct sched_param sch_param = {.sched_priority = cf_sched_priority};
+  if (sched_setscheduler(0, SCHED_FIFO, &sch_param)) {
+    die("sched_setscheduler: %m");
+  }
+}
+
 static void
 setup_root(void)
 {
@@ -824,6 +835,7 @@ static int
 box_inside(char **args)
 {
   cg_enter();
+  setup_sched();
   setup_root();
   setup_net();
   setup_rlimits();

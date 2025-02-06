@@ -20,6 +20,8 @@ int cf_first_uid;
 int cf_first_gid;
 int cf_num_boxes;
 int cf_restricted_init;
+char *cf_sched_mode;
+int cf_sched_priority;
 
 static int line_number;
 static struct cf_per_box *per_box_configs;
@@ -66,6 +68,10 @@ cf_entry_toplevel(char *key, char *val)
     cf_num_boxes = cf_int(val);
   else if (!strcmp(key, "restricted_init"))
     cf_restricted_init = cf_int(val);
+  else if (!strcmp(key, "sched_mode"))
+    cf_sched_mode = cf_string(val);
+  else if (!strcmp(key, "sched_priority"))
+    cf_sched_priority = cf_int(val);
   else
     cf_err("Unknown configuration item");
 }
@@ -107,7 +113,9 @@ cf_check(void)
       !cf_cg_root ||
       !cf_first_uid ||
       !cf_first_gid ||
-      !cf_num_boxes)
+      !cf_num_boxes ||
+      (cf_sched_mode && (!cf_sched_priority && strcmp(cf_sched_mode, "fifo") == 0))
+    )
     cf_err("Configuration is not complete");
 }
 
